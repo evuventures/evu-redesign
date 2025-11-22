@@ -6,7 +6,6 @@ const rspack  = require('@rspack/core')
 const { ProvidePlugin } = require('@rspack/core');
 const ImageMinimizerPlugin = require("image-minimizer-webpack-plugin");
 const imageminWebp = require("imagemin-webp");
-
 const pugPages = glob.sync('src/views/pages/*.pug')
 
 
@@ -15,6 +14,7 @@ module.exports = {
     entry : path.resolve(__dirname, "src/apps/index.js"),
     output :{
         path : path.resolve(__dirname,'dist'),
+        chunkFilename: 'js/vendor/[name].js',
         filename:'js/[name].bundle.js',
         clean: true,
     },
@@ -39,15 +39,15 @@ module.exports = {
             new ImageMinimizerPlugin({
                 minimizer: {
                 implementation: ImageMinimizerPlugin.squooshMinify,
-                options: {
-                    encodeOptions: {
-                    mozjpeg: { quality: 75 }, 
-                    oxipng: {},              
+                    options: {
+                        encodeOptions: {
+                        mozjpeg: { quality: 75 }, 
+                        oxipng: {},              
+                        },
+                        resize: {
+                            width: 800,  
+                        },
                     },
-                    resize: {
-                    width: 800,  
-                    },
-                },
                 },
             }),
         ],
@@ -90,12 +90,9 @@ module.exports = {
         ]
     },
     plugins: [
-
         new rspack.CssExtractRspackPlugin({
             filename: "css/[name].css", 
         }),
-
-        
         new rspack.CopyRspackPlugin({
             patterns: [
                 { from: 'src/media', to: 'media'},
@@ -108,7 +105,6 @@ module.exports = {
         }),
 
         ...pugPages.map((file) => {
-       
             const pageName = path.basename(file, '.pug')
             return new HtmlWebpackPlugin({
               title: pageName.charAt(0).toUpperCase() + pageName.slice(1),
@@ -117,10 +113,7 @@ module.exports = {
               inject: 'body',
               chunks: ['main'],
             })
-            
         }),
-
- 
     ],
     
 }
