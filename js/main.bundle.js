@@ -112546,7 +112546,7 @@ var App = /*#__PURE__*/ function() {
                 var loader = new three_examples_jsm_loaders_GLTFLoader__WEBPACK_IMPORTED_MODULE_10__.GLTFLoader();
                 var dracoLoader = new three_examples_jsm_loaders_DRACOLoader_js__WEBPACK_IMPORTED_MODULE_11__.DRACOLoader();
                 // Set the path to the Draco decoder files
-                dracoLoader.setDecoderPath('/draco/'); // <-- You’ll need these files in your public folder
+                dracoLoader.setDecoderPath(window.location.href + '/draco/'); // <-- You’ll need these files in your public folder
                 loader.setDRACOLoader(dracoLoader);
                 loader.load(_media_models_dragonfly_glb__WEBPACK_IMPORTED_MODULE_4__, function(gltf) {
                     var model = gltf.scene;
