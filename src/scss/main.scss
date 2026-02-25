@@ -1,35 +1,14 @@
 
 
-/* ======== */
-/* Main CSS */
-/* ======== */
+@use "variables";
+@use "mixins";
+@use "normalize";
+@use "resets";
+@use "fonts";
+@use "general";
+@use "blocks/blocks";
 
-
-// Abstracts
-@use "abstracts" as *;
-// Base
-@use "base" as *;
-// Components
-@use "components" as *;
-// Layouts
-@use "layouts" as *;
-// Pages
-@use "pages" as *;
-
-@import '../../src/scss/offcanvas/pure-drawer.scss';
-
-
-/* ======== */
-/* Main TAILWINDCSS DECORATIVES */
-/* ======== */
-
+// Tailwind 
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
-
-/* ======== */
-/* Main DAISYUI DECORATIVES */
-/* ======== */
-
-@plugin "daisyui";
-

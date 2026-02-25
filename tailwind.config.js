@@ -2,7 +2,7 @@
 /**
  * fluid function
  */
-import { Fluid } from './assets/apps/extra/math'
+import { Fluid } from './src/apps/extra/math.js'
 const daisyui = require('daisyui')
 
 module.exports = {

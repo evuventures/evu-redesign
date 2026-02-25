@@ -1,0 +1,43 @@
+/* FONTS */
+
+.text-xxl{
+    @apply 
+    leading-none
+    h-auto
+    uppercase;
+}
+
+.text-xl{
+   @apply leading-none; 
+}
+
+.text-lg {
+   @apply leading-none;  
+}
+
+.text-md{
+    @apply leading-none;  
+}
+
+.text-sm {
+    @apply leading-none; 
+}
+
+.text-body {
+    @apply leading-none;   
+}
+.text-input {
+   @apply leading-none; 
+}
+
+.text-highlight {
+   @apply leading-none; 
+}
+
+.text-link {
+ @apply leading-none;  
+}
+
+.text-direction {
+   @apply leading-none; 
+}

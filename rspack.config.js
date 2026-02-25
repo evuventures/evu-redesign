@@ -55,6 +55,10 @@ module.exports = {
     module:{
         rules:[
             {
+                test: /\.(glb|gltf)$/,
+                type: 'asset/resource', // copies file to output folder
+            },
+            {
                 test: /\.(?:js|mjs|cjs)$/,
                 exclude: /node_modules/,
                 use: 'builtin:swc-loader'
@@ -96,6 +100,7 @@ module.exports = {
         new rspack.CopyRspackPlugin({
             patterns: [
                 { from: 'src/media', to: 'media'},
+                { from: 'src/draco', to: 'draco'}
             ],
         }),
         new ProvidePlugin({
