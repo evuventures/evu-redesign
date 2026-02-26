@@ -112506,10 +112506,9 @@ var App = /*#__PURE__*/ function() {
             key: "createLights",
             value: function createLights() {
                 var directionalLight = new three__WEBPACK_IMPORTED_MODULE_6__.DirectionalLight(0xffffff, 1);
-                directionalLight.position.set(0, 5, 5); // angled light
+                directionalLight.position.set(5, 5, 5);
                 directionalLight.castShadow = true;
                 this.scene.add(directionalLight);
-                // Optional: subtle ambient light for fill
                 var ambientLight = new three__WEBPACK_IMPORTED_MODULE_6__.AmbientLight(0xffffff, 0.2);
                 this.scene.add(ambientLight);
             }
@@ -112521,16 +112520,14 @@ var App = /*#__PURE__*/ function() {
                 this.renderPass = new postprocessing__WEBPACK_IMPORTED_MODULE_8__.RenderPass(this.scene, this.camera);
                 this.composer.addPass(this.renderPass);
                 var asciiTexture = new postprocessing__WEBPACK_IMPORTED_MODULE_8__.ASCIITexture({
-                    characters: "  1234566789",
-                    cellCount: 2,
-                    fontSize: 2,
-                    resolution: 1
+                    characters: "00112233445566778899",
+                    resolution: 0.5
                 });
                 asciiTexture.needsUpdate = true;
                 this.aasciiPass = new postprocessing__WEBPACK_IMPORTED_MODULE_8__.EffectPass(this.camera, new postprocessing__WEBPACK_IMPORTED_MODULE_8__.ASCIIEffect({
-                    texture: asciiTexture,
-                    cellSize: 7
+                    cellSize: 8.5
                 }));
+                this.aasciiPass.effects[0].asciiTexture = asciiTexture;
                 this.composer.addPass(this.aasciiPass);
             }
         },
@@ -112552,24 +112549,18 @@ var App = /*#__PURE__*/ function() {
                     gltf.scene.traverse(function(child) {
                         child.material = _this.material;
                     });
-                    var box = new three__WEBPACK_IMPORTED_MODULE_6__.Box3().setFromObject(gltf.scene);
-                    var center = new three__WEBPACK_IMPORTED_MODULE_6__.Vector3();
-                    box.getCenter(center);
-                    gltf.scene.position.x += gltf.scene.position.x - center.x;
-                    gltf.scene.position.y += gltf.scene.position.y - center.y;
-                    gltf.scene.position.z += gltf.scene.position.z - center.z;
                     _this.scene.add(gltf.scene);
                     _this.mixer = new three__WEBPACK_IMPORTED_MODULE_6__.AnimationMixer(gltf.scene);
                     var action = _this.mixer.clipAction(gltf.animations[0]);
                     action.play();
-                    _this.mixer.timeScale = 0.5;
+                    _this.mixer.timeScale = 0.3;
                     _this.timer = new three__WEBPACK_IMPORTED_MODULE_6__.Timer();
                 }, function(xhr) {
                     console.log(xhr.loaded / xhr.total * 100 + '% loaded');
                 }, function(error) {
                     console.log(error);
                 });
-                this.camera.position.z = 1.4;
+                this.camera.position.z = 1.2;
             }
         },
         {
