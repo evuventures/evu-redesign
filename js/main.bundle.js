@@ -6254,7 +6254,7 @@ TweenMaxWithCSS = gsapWithCSS.core.Tween;
   \****************************************/
 (function (module, __unused_webpack_exports, __webpack_require__) {
 "use strict";
-module.exports = __webpack_require__.p + "3d2f240471938c36.glb";
+module.exports = __webpack_require__.p + "877ea2e76ed36227.glb";
 
 }),
 "./src/apps/contact/index.js": 
@@ -112523,13 +112523,13 @@ var App = /*#__PURE__*/ function() {
                 var asciiTexture = new postprocessing__WEBPACK_IMPORTED_MODULE_8__.ASCIITexture({
                     characters: "  1234566789",
                     cellCount: 2,
-                    fontSize: 16,
+                    fontSize: 2,
                     resolution: 1
                 });
                 asciiTexture.needsUpdate = true;
                 this.aasciiPass = new postprocessing__WEBPACK_IMPORTED_MODULE_8__.EffectPass(this.camera, new postprocessing__WEBPACK_IMPORTED_MODULE_8__.ASCIIEffect({
                     texture: asciiTexture,
-                    cellSize: 6
+                    cellSize: 7
                 }));
                 this.composer.addPass(this.aasciiPass);
             }
@@ -112547,10 +112547,10 @@ var App = /*#__PURE__*/ function() {
                 this.dracoLoader = new three_examples_jsm_loaders_DRACOLoader_js__WEBPACK_IMPORTED_MODULE_11__.DRACOLoader();
                 this.dracoLoader.setDecoderPath(window.location.href + '/draco/');
                 this.loader.setDRACOLoader(this.dracoLoader);
+                this.mixer;
                 this.loader.load(_media_models_dragonfly_glb__WEBPACK_IMPORTED_MODULE_4__, function(gltf) {
                     gltf.scene.traverse(function(child) {
                         child.material = _this.material;
-                        child.position.set(0, 0, 0);
                     });
                     var box = new three__WEBPACK_IMPORTED_MODULE_6__.Box3().setFromObject(gltf.scene);
                     var center = new three__WEBPACK_IMPORTED_MODULE_6__.Vector3();
@@ -112559,17 +112559,27 @@ var App = /*#__PURE__*/ function() {
                     gltf.scene.position.y += gltf.scene.position.y - center.y;
                     gltf.scene.position.z += gltf.scene.position.z - center.z;
                     _this.scene.add(gltf.scene);
+                    _this.mixer = new three__WEBPACK_IMPORTED_MODULE_6__.AnimationMixer(gltf.scene);
+                    var action = _this.mixer.clipAction(gltf.animations[0]);
+                    action.play();
+                    _this.mixer.timeScale = 0.5;
+                    _this.timer = new three__WEBPACK_IMPORTED_MODULE_6__.Timer();
                 }, function(xhr) {
                     console.log(xhr.loaded / xhr.total * 100 + '% loaded');
                 }, function(error) {
                     console.log(error);
                 });
-                this.camera.position.z = 3;
+                this.camera.position.z = 1.4;
             }
         },
         {
             key: "update",
-            value: function update() {
+            value: function update(time) {
+                if (this.timer) {
+                    this.timer.update(time);
+                    var delta = this.timer.getDelta();
+                    this.mixer.update(delta);
+                }
                 // this.renderer.render(this.scene, this.camera);
                 this.composer.render();
                 this.controls.update();
