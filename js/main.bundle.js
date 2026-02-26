@@ -112423,6 +112423,7 @@ var App = /*#__PURE__*/ function() {
         this.createScene();
         this.createCamera();
         this.createRenderer();
+        this.createLights();
         this.createAASCIIEffect();
         this.createGeometry();
         this.update();
@@ -112491,17 +112492,26 @@ var App = /*#__PURE__*/ function() {
             key: "createCamera",
             value: function createCamera() {
                 this.camera = new three__WEBPACK_IMPORTED_MODULE_6__.PerspectiveCamera(70, this.screen.width / this.screen.height, 0.01, 10);
-                this.camera.position.z = 1;
             }
         },
         {
             key: "createRenderer",
             value: function createRenderer() {
-                this.renderer = new three__WEBPACK_IMPORTED_MODULE_7__.WebGLRenderer({
-                    antialias: window.devicePixelRatio < 2
-                });
-                this.renderer.setSize(window.innerWidth, window.innerHeight);
+                this.renderer = new three__WEBPACK_IMPORTED_MODULE_7__.WebGLRenderer();
+                this.renderer.setSize(this.screen.width, this.screen.height);
                 document.body.appendChild(this.renderer.domElement);
+            }
+        },
+        {
+            key: "createLights",
+            value: function createLights() {
+                var directionalLight = new three__WEBPACK_IMPORTED_MODULE_6__.DirectionalLight(0xffffff, 1);
+                directionalLight.position.set(0, 5, 5); // angled light
+                directionalLight.castShadow = true;
+                this.scene.add(directionalLight);
+                // Optional: subtle ambient light for fill
+                var ambientLight = new three__WEBPACK_IMPORTED_MODULE_6__.AmbientLight(0xffffff, 0.2);
+                this.scene.add(ambientLight);
             }
         },
         {
@@ -112510,16 +112520,16 @@ var App = /*#__PURE__*/ function() {
                 this.composer = new postprocessing__WEBPACK_IMPORTED_MODULE_8__.EffectComposer(this.renderer);
                 this.renderPass = new postprocessing__WEBPACK_IMPORTED_MODULE_8__.RenderPass(this.scene, this.camera);
                 this.composer.addPass(this.renderPass);
-                // 1. Create the texture with your custom string
                 var asciiTexture = new postprocessing__WEBPACK_IMPORTED_MODULE_8__.ASCIITexture({
-                    cellCount: 6,
+                    characters: "  1234566789",
+                    cellCount: 2,
                     fontSize: 16,
                     resolution: 1
                 });
                 asciiTexture.needsUpdate = true;
                 this.aasciiPass = new postprocessing__WEBPACK_IMPORTED_MODULE_8__.EffectPass(this.camera, new postprocessing__WEBPACK_IMPORTED_MODULE_8__.ASCIIEffect({
                     texture: asciiTexture,
-                    cellSize: 5
+                    cellSize: 6
                 }));
                 this.composer.addPass(this.aasciiPass);
             }
@@ -112528,34 +112538,27 @@ var App = /*#__PURE__*/ function() {
             key: "createGeometry",
             value: function createGeometry() {
                 var _this = this;
-                this.geometry = new three__WEBPACK_IMPORTED_MODULE_6__.TorusGeometry(6, 3, 60, 30, 40);
                 this.material = new three__WEBPACK_IMPORTED_MODULE_6__.MeshStandardMaterial({
                     color: 0xffffff
                 });
-                this.cube = new three__WEBPACK_IMPORTED_MODULE_6__.Mesh(this.geometry, this.material);
-                // this.scene.add( this.cube );
                 this.controls = new three_examples_jsm_controls_OrbitControls__WEBPACK_IMPORTED_MODULE_9__.OrbitControls(this.camera, this.renderer.domElement);
                 this.controls.enableDamping = true;
-                var directionalLight = new three__WEBPACK_IMPORTED_MODULE_6__.DirectionalLight(0xffffff, 1);
-                directionalLight.position.set(0, 5, 5); // angled light
-                directionalLight.castShadow = true;
-                this.scene.add(directionalLight);
-                // Optional: subtle ambient light for fill
-                var ambientLight = new three__WEBPACK_IMPORTED_MODULE_6__.AmbientLight(0xffffff, 0.2);
-                this.scene.add(ambientLight);
-                var loader = new three_examples_jsm_loaders_GLTFLoader__WEBPACK_IMPORTED_MODULE_10__.GLTFLoader();
-                var dracoLoader = new three_examples_jsm_loaders_DRACOLoader_js__WEBPACK_IMPORTED_MODULE_11__.DRACOLoader();
-                // Set the path to the Draco decoder files
-                dracoLoader.setDecoderPath(window.location.href + '/draco/'); // <-- You’ll need these files in your public folder
-                loader.setDRACOLoader(dracoLoader);
-                loader.load(_media_models_dragonfly_glb__WEBPACK_IMPORTED_MODULE_4__, function(gltf) {
-                    var model = gltf.scene;
+                this.loader = new three_examples_jsm_loaders_GLTFLoader__WEBPACK_IMPORTED_MODULE_10__.GLTFLoader();
+                this.dracoLoader = new three_examples_jsm_loaders_DRACOLoader_js__WEBPACK_IMPORTED_MODULE_11__.DRACOLoader();
+                this.dracoLoader.setDecoderPath(window.location.href + '/draco/');
+                this.loader.setDRACOLoader(this.dracoLoader);
+                this.loader.load(_media_models_dragonfly_glb__WEBPACK_IMPORTED_MODULE_4__, function(gltf) {
                     gltf.scene.traverse(function(child) {
                         child.material = _this.material;
-                        // child.scale.set(0.8, 0.8, 0.8);
                         child.position.set(0, 0, 0);
                     });
-                    _this.scene.add(model);
+                    var box = new three__WEBPACK_IMPORTED_MODULE_6__.Box3().setFromObject(gltf.scene);
+                    var center = new three__WEBPACK_IMPORTED_MODULE_6__.Vector3();
+                    box.getCenter(center);
+                    gltf.scene.position.x += gltf.scene.position.x - center.x;
+                    gltf.scene.position.y += gltf.scene.position.y - center.y;
+                    gltf.scene.position.z += gltf.scene.position.z - center.z;
+                    _this.scene.add(gltf.scene);
                 }, function(xhr) {
                     console.log(xhr.loaded / xhr.total * 100 + '% loaded');
                 }, function(error) {
@@ -112566,11 +112569,9 @@ var App = /*#__PURE__*/ function() {
         },
         {
             key: "update",
-            value: function update(time) {
-                this.cube.rotation.x = time / 2000;
-                this.cube.rotation.y = time / 1000;
-                // this.renderer.render(this.scene, this.camera);
-                this.composer.render();
+            value: function update() {
+                this.renderer.render(this.scene, this.camera);
+                // this.composer.render();
                 this.controls.update();
                 requestAnimationFrame(this.update.bind(this));
             }
