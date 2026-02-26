@@ -112570,8 +112570,8 @@ var App = /*#__PURE__*/ function() {
         {
             key: "update",
             value: function update() {
-                this.renderer.render(this.scene, this.camera);
-                // this.composer.render();
+                // this.renderer.render(this.scene, this.camera);
+                this.composer.render();
                 this.controls.update();
                 requestAnimationFrame(this.update.bind(this));
             }
