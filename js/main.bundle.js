@@ -6304,6 +6304,99 @@ var Contact = /*#__PURE__*/ function() {
 
 
 }),
+"./src/apps/extra/matrix.js": 
+/*!**********************************!*\
+  !*** ./src/apps/extra/matrix.js ***!
+  \**********************************/
+(function (__unused_webpack_module, __webpack_exports__, __webpack_require__) {
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+__webpack_require__.d(__webpack_exports__, {
+  "default": () => (Matrix)
+});
+function _class_call_check(instance, Constructor) {
+    if (!(instance instanceof Constructor)) {
+        throw new TypeError("Cannot call a class as a function");
+    }
+}
+function _defineProperties(target, props) {
+    for(var i = 0; i < props.length; i++){
+        var descriptor = props[i];
+        descriptor.enumerable = descriptor.enumerable || false;
+        descriptor.configurable = true;
+        if ("value" in descriptor) descriptor.writable = true;
+        Object.defineProperty(target, descriptor.key, descriptor);
+    }
+}
+function _create_class(Constructor, protoProps, staticProps) {
+    if (protoProps) _defineProperties(Constructor.prototype, protoProps);
+    if (staticProps) _defineProperties(Constructor, staticProps);
+    return Constructor;
+}
+var Matrix = /*#__PURE__*/ function() {
+    "use strict";
+    function Matrix() {
+        _class_call_check(this, Matrix);
+        this.createRects();
+        this.createMatrix();
+    }
+    _create_class(Matrix, [
+        {
+            key: "createRects",
+            value: function createRects() {
+                this.canvas = document.querySelector('.header-canvas');
+                this.ctx = this.canvas.getContext('2d');
+                this.w = this.canvas.width = window.innerWidth;
+                this.h = this.canvas.height = window.innerHeight;
+                this.globalSpeed = 1;
+                // ✅ responsive font
+                this.fontSize = Math.max(12, this.w / 40);
+                // ✅ spacing based on font
+                this.columnWidth = this.fontSize * 1.2;
+                // ✅ responsive columns
+                var cols = Math.floor(this.w / this.columnWidth) + 1;
+                this.yPosition = Array(cols).fill(0);
+                this.ctx.font = "".concat(this.fontSize, "px monospace");
+                // background reset
+                this.ctx.fillStyle = '#000';
+                this.ctx.fillRect(0, 0, this.w, this.h);
+            }
+        },
+        {
+            key: "createMatrix",
+            value: function createMatrix() {
+                var _this = this;
+                // trail
+                this.ctx.fillStyle = 'rgba(0,0,0,0.08)';
+                this.ctx.fillRect(0, 0, this.w, this.h);
+                this.ctx.fillStyle = '#0f0';
+                this.yPosition.forEach(function(y, index) {
+                    var charSets = [
+                        '2254547948',
+                        '@#$%^&*+='
+                    ];
+                    var chars = charSets[index % charSets.length];
+                    var text = chars[Math.floor(Math.random() * chars.length)];
+                    // ✅ use dynamic spacing
+                    var x = index * _this.columnWidth;
+                    _this.ctx.fillText(text, x, y);
+                    // ✅ ONLY ONE update for speed
+                    if (y > _this.h + Math.random() * 10000) {
+                        _this.yPosition[index] = 0;
+                    } else {
+                        // ✅ responsive speed
+                        _this.yPosition[index] = y + _this.fontSize * 0.8;
+                    }
+                });
+            }
+        }
+    ]);
+    return Matrix;
+}();
+
+
+
+}),
 "./src/apps/home/index.js": 
 /*!********************************!*\
   !*** ./src/apps/home/index.js ***!
@@ -112366,15 +112459,24 @@ __webpack_require__.r(__webpack_exports__);
 /* ESM import */var _contact__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./contact */ "./src/apps/contact/index.js");
 /* ESM import */var _barba_core__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! @barba/core */ "./node_modules/@barba/core/dist/barba.umd.js");
 /* ESM import */var _barba_core__WEBPACK_IMPORTED_MODULE_2___default = /*#__PURE__*/__webpack_require__.n(_barba_core__WEBPACK_IMPORTED_MODULE_2__);
-/* ESM import */var gsap__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! gsap */ "./node_modules/gsap/index.js");
+/* ESM import */var gsap__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! gsap */ "./node_modules/gsap/index.js");
 /* ESM import */var _scss_main_scss__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ../scss/main.scss */ "./src/scss/main.scss");
-/* ESM import */var three__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! three */ "./node_modules/three/build/three.core.js");
-/* ESM import */var three__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! three */ "./node_modules/three/build/three.module.js");
-/* ESM import */var postprocessing__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(/*! postprocessing */ "./node_modules/postprocessing/build/index.js");
-/* ESM import */var three_examples_jsm_loaders_GLTFLoader__WEBPACK_IMPORTED_MODULE_10__ = __webpack_require__(/*! three/examples/jsm/loaders/GLTFLoader */ "./node_modules/three/examples/jsm/loaders/GLTFLoader.js");
-/* ESM import */var three_examples_jsm_loaders_DRACOLoader_js__WEBPACK_IMPORTED_MODULE_11__ = __webpack_require__(/*! three/examples/jsm/loaders/DRACOLoader.js */ "./node_modules/three/examples/jsm/loaders/DRACOLoader.js");
-/* ESM import */var _media_models_dragonfly_glb__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ../media/models/dragonfly.glb */ "./src/media/models/dragonfly.glb");
-/* ESM import */var three_examples_jsm_controls_OrbitControls__WEBPACK_IMPORTED_MODULE_9__ = __webpack_require__(/*! three/examples/jsm/controls/OrbitControls */ "./node_modules/three/examples/jsm/controls/OrbitControls.js");
+/* ESM import */var three__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! three */ "./node_modules/three/build/three.core.js");
+/* ESM import */var three__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(/*! three */ "./node_modules/three/build/three.module.js");
+/* ESM import */var postprocessing__WEBPACK_IMPORTED_MODULE_9__ = __webpack_require__(/*! postprocessing */ "./node_modules/postprocessing/build/index.js");
+/* ESM import */var three_examples_jsm_loaders_GLTFLoader__WEBPACK_IMPORTED_MODULE_11__ = __webpack_require__(/*! three/examples/jsm/loaders/GLTFLoader */ "./node_modules/three/examples/jsm/loaders/GLTFLoader.js");
+/* ESM import */var three_examples_jsm_loaders_DRACOLoader_js__WEBPACK_IMPORTED_MODULE_12__ = __webpack_require__(/*! three/examples/jsm/loaders/DRACOLoader.js */ "./node_modules/three/examples/jsm/loaders/DRACOLoader.js");
+/* ESM import */var three_examples_jsm_controls_OrbitControls__WEBPACK_IMPORTED_MODULE_10__ = __webpack_require__(/*! three/examples/jsm/controls/OrbitControls */ "./node_modules/three/examples/jsm/controls/OrbitControls.js");
+/* ESM import */var _apps_extra_matrix_js__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ../apps/extra/matrix.js */ "./src/apps/extra/matrix.js");
+/* ESM import */var _media_models_dragonfly_glb__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ../media/models/dragonfly.glb */ "./src/media/models/dragonfly.glb");
+function _array_like_to_array(arr, len) {
+    if (len == null || len > arr.length) len = arr.length;
+    for(var i = 0, arr2 = new Array(len); i < len; i++)arr2[i] = arr[i];
+    return arr2;
+}
+function _array_without_holes(arr) {
+    if (Array.isArray(arr)) return _array_like_to_array(arr);
+}
 function _class_call_check(instance, Constructor) {
     if (!(instance instanceof Constructor)) {
         throw new TypeError("Cannot call a class as a function");
@@ -112394,6 +112496,24 @@ function _create_class(Constructor, protoProps, staticProps) {
     if (staticProps) _defineProperties(Constructor, staticProps);
     return Constructor;
 }
+function _iterable_to_array(iter) {
+    if (typeof Symbol !== "undefined" && iter[Symbol.iterator] != null || iter["@@iterator"] != null) return Array.from(iter);
+}
+function _non_iterable_spread() {
+    throw new TypeError("Invalid attempt to spread non-iterable instance.\\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method.");
+}
+function _to_consumable_array(arr) {
+    return _array_without_holes(arr) || _iterable_to_array(arr) || _unsupported_iterable_to_array(arr) || _non_iterable_spread();
+}
+function _unsupported_iterable_to_array(o, minLen) {
+    if (!o) return;
+    if (typeof o === "string") return _array_like_to_array(o, minLen);
+    var n = Object.prototype.toString.call(o).slice(8, -1);
+    if (n === "Object" && o.constructor) n = o.constructor.name;
+    if (n === "Map" || n === "Set") return Array.from(n);
+    if (n === "Arguments" || /^(?:Ui|I)nt(?:8|16|32)(?:Clamped)?Array$/.test(n)) return _array_like_to_array(o, minLen);
+}
+
 
 
 
@@ -112410,14 +112530,19 @@ var App = /*#__PURE__*/ function() {
     "use strict";
     function App() {
         _class_call_check(this, App);
+        this.hamburger = _to_consumable_array(document.querySelectorAll(".menu-open,.hamburger"));
         this.pages = {
             home: new _home__WEBPACK_IMPORTED_MODULE_0__["default"](),
-            contact: new _contact__WEBPACK_IMPORTED_MODULE_1__["default"]()
+            contact: new _contact__WEBPACK_IMPORTED_MODULE_1__["default"](),
+            effects: {
+                matrix: new _apps_extra_matrix_js__WEBPACK_IMPORTED_MODULE_4__["default"]()
+            }
         };
         this.screen = {
             width: window.innerWidth,
             height: window.innerHeight
         };
+        this.isTrue = this.createNav();
         this.createAjaxNavigation();
         this.createReRender();
         this.createScene();
@@ -112434,7 +112559,7 @@ var App = /*#__PURE__*/ function() {
             key: "createAjaxNavigation",
             value: function createAjaxNavigation() {
                 var easeIn = function(container, done) {
-                    return gsap__WEBPACK_IMPORTED_MODULE_5__["default"].to(container, {
+                    return gsap__WEBPACK_IMPORTED_MODULE_6__["default"].to(container, {
                         autoAlpha: 0,
                         duration: 1,
                         ease: 'none',
@@ -112444,7 +112569,7 @@ var App = /*#__PURE__*/ function() {
                     });
                 };
                 var easeOut = function(container) {
-                    return gsap__WEBPACK_IMPORTED_MODULE_5__["default"].from(container, {
+                    return gsap__WEBPACK_IMPORTED_MODULE_6__["default"].from(container, {
                         autoAlpha: 0,
                         duration: 1,
                         ease: 'none'
@@ -112473,6 +112598,19 @@ var App = /*#__PURE__*/ function() {
             }
         },
         {
+            key: "createNav",
+            value: function createNav() {
+                return gsap__WEBPACK_IMPORTED_MODULE_6__["default"].timeline({
+                    paused: true,
+                    reversed: true
+                }).to('.drop-down-menu ul', {
+                    height: 'auto',
+                    duration: 1,
+                    ease: 'power4.inOut'
+                });
+            }
+        },
+        {
             key: "createReRender",
             value: function createReRender() {
                 var _this = this;
@@ -112485,19 +112623,22 @@ var App = /*#__PURE__*/ function() {
         {
             key: "createScene",
             value: function createScene() {
-                this.scene = new three__WEBPACK_IMPORTED_MODULE_6__.Scene();
+                this.scene = new three__WEBPACK_IMPORTED_MODULE_7__.Scene();
+                this.scene.background = new three__WEBPACK_IMPORTED_MODULE_7__.Color(0x171717);
             }
         },
         {
             key: "createCamera",
             value: function createCamera() {
-                this.camera = new three__WEBPACK_IMPORTED_MODULE_6__.PerspectiveCamera(70, this.screen.width / this.screen.height, 0.01, 10);
+                this.camera = new three__WEBPACK_IMPORTED_MODULE_7__.PerspectiveCamera(70, this.screen.width / this.screen.height, 0.01, 10);
             }
         },
         {
             key: "createRenderer",
             value: function createRenderer() {
-                this.renderer = new three__WEBPACK_IMPORTED_MODULE_7__.WebGLRenderer();
+                this.renderer = new three__WEBPACK_IMPORTED_MODULE_8__.WebGLRenderer({
+                    canvas: document.querySelector('.main-canvas')
+                });
                 this.renderer.setSize(this.screen.width, this.screen.height);
                 document.body.appendChild(this.renderer.domElement);
             }
@@ -112505,27 +112646,26 @@ var App = /*#__PURE__*/ function() {
         {
             key: "createLights",
             value: function createLights() {
-                var directionalLight = new three__WEBPACK_IMPORTED_MODULE_6__.DirectionalLight(0xffffff, 1);
+                var directionalLight = new three__WEBPACK_IMPORTED_MODULE_7__.DirectionalLight(0xffffff, 1.0);
                 directionalLight.position.set(5, 5, 5);
-                directionalLight.castShadow = true;
                 this.scene.add(directionalLight);
-                var ambientLight = new three__WEBPACK_IMPORTED_MODULE_6__.AmbientLight(0xffffff, 0.2);
+                var ambientLight = new three__WEBPACK_IMPORTED_MODULE_7__.AmbientLight(0xffffff, 0.2);
                 this.scene.add(ambientLight);
             }
         },
         {
             key: "createAASCIIEffect",
             value: function createAASCIIEffect() {
-                this.composer = new postprocessing__WEBPACK_IMPORTED_MODULE_8__.EffectComposer(this.renderer);
-                this.renderPass = new postprocessing__WEBPACK_IMPORTED_MODULE_8__.RenderPass(this.scene, this.camera);
+                this.composer = new postprocessing__WEBPACK_IMPORTED_MODULE_9__.EffectComposer(this.renderer);
+                this.renderPass = new postprocessing__WEBPACK_IMPORTED_MODULE_9__.RenderPass(this.scene, this.camera);
                 this.composer.addPass(this.renderPass);
-                var asciiTexture = new postprocessing__WEBPACK_IMPORTED_MODULE_8__.ASCIITexture({
-                    characters: "00112233445566778899",
-                    resolution: 0.5
+                var asciiTexture = new postprocessing__WEBPACK_IMPORTED_MODULE_9__.ASCIITexture({
+                    characters: " ''2254547948@",
+                    cellCount: 18
                 });
-                asciiTexture.needsUpdate = true;
-                this.aasciiPass = new postprocessing__WEBPACK_IMPORTED_MODULE_8__.EffectPass(this.camera, new postprocessing__WEBPACK_IMPORTED_MODULE_8__.ASCIIEffect({
-                    cellSize: 8.5
+                this.aasciiPass = new postprocessing__WEBPACK_IMPORTED_MODULE_9__.EffectPass(this.camera, new postprocessing__WEBPACK_IMPORTED_MODULE_9__.ASCIIEffect({
+                    cellSize: 12,
+                    invert: true
                 }));
                 this.aasciiPass.effects[0].asciiTexture = asciiTexture;
                 this.composer.addPass(this.aasciiPass);
@@ -112535,32 +112675,42 @@ var App = /*#__PURE__*/ function() {
             key: "createGeometry",
             value: function createGeometry() {
                 var _this = this;
-                this.material = new three__WEBPACK_IMPORTED_MODULE_6__.MeshStandardMaterial({
-                    color: 0xffffff
-                });
-                this.controls = new three_examples_jsm_controls_OrbitControls__WEBPACK_IMPORTED_MODULE_9__.OrbitControls(this.camera, this.renderer.domElement);
+                this.material = new three__WEBPACK_IMPORTED_MODULE_7__.MeshStandardMaterial();
+                this.controls = new three_examples_jsm_controls_OrbitControls__WEBPACK_IMPORTED_MODULE_10__.OrbitControls(this.camera, this.renderer.domElement);
                 this.controls.enableDamping = true;
-                this.loader = new three_examples_jsm_loaders_GLTFLoader__WEBPACK_IMPORTED_MODULE_10__.GLTFLoader();
-                this.dracoLoader = new three_examples_jsm_loaders_DRACOLoader_js__WEBPACK_IMPORTED_MODULE_11__.DRACOLoader();
+                this.loader = new three_examples_jsm_loaders_GLTFLoader__WEBPACK_IMPORTED_MODULE_11__.GLTFLoader();
+                this.dracoLoader = new three_examples_jsm_loaders_DRACOLoader_js__WEBPACK_IMPORTED_MODULE_12__.DRACOLoader();
                 this.dracoLoader.setDecoderPath(window.location.href + '/draco/');
                 this.loader.setDRACOLoader(this.dracoLoader);
                 this.mixer;
-                this.loader.load(_media_models_dragonfly_glb__WEBPACK_IMPORTED_MODULE_4__, function(gltf) {
+                this.loader.load(_media_models_dragonfly_glb__WEBPACK_IMPORTED_MODULE_5__, function(gltf) {
                     gltf.scene.traverse(function(child) {
                         child.material = _this.material;
                     });
                     _this.scene.add(gltf.scene);
-                    _this.mixer = new three__WEBPACK_IMPORTED_MODULE_6__.AnimationMixer(gltf.scene);
+                    _this.mixer = new three__WEBPACK_IMPORTED_MODULE_7__.AnimationMixer(gltf.scene);
                     var action = _this.mixer.clipAction(gltf.animations[0]);
                     action.play();
                     _this.mixer.timeScale = 0.3;
-                    _this.timer = new three__WEBPACK_IMPORTED_MODULE_6__.Timer();
+                    _this.timer = new three__WEBPACK_IMPORTED_MODULE_7__.Timer();
                 }, function(xhr) {
                     console.log(xhr.loaded / xhr.total * 100 + '% loaded');
                 }, function(error) {
                     console.log(error);
                 });
                 this.camera.position.z = 1.2;
+            }
+        },
+        {
+            key: "onResize",
+            value: function onResize() {
+                // 1. Get new dimensions (e.g., from the window or a container)
+                var width = window.innerWidth;
+                var height = window.innerHeight;
+                this.camera.aspect = width / height;
+                this.camera.updateProjectionMatrix();
+                this.renderer.setSize(width, height);
+                this.renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
             }
         },
         {
@@ -112574,12 +112724,25 @@ var App = /*#__PURE__*/ function() {
                 // this.renderer.render(this.scene, this.camera);
                 this.composer.render();
                 this.controls.update();
-                requestAnimationFrame(this.update.bind(this));
+                this.pages.effects.matrix.createMatrix();
+                window.requestAnimationFrame(this.update.bind(this));
             }
         },
         {
             key: "addEventListeners",
-            value: function addEventListeners() {}
+            value: function addEventListeners() {
+                var _this = this;
+                this.hamburger.forEach(function(element) {
+                    element.addEventListener('click', function() {
+                        _this.isTrue.reversed() ? _this.isTrue.play() : _this.isTrue.reverse();
+                        _this.hamburger[0].classList.toggle('open');
+                    });
+                });
+                window.addEventListener('resize', function() {
+                    _this.onResize();
+                    _this.pages.effects.matrix.createRects();
+                });
+            }
         }
     ]);
     return App;
