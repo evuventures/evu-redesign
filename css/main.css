@@ -636,11 +636,12 @@ header.navbar .nav-menu .drop-down-menu ul li {
 header.navbar .nav-menu .drop-down-menu ul li:hover {
   background: #ed4813;
 }
-header.navbar .nav-menu .drop-down-menu ul li:hover a {
+header.navbar .nav-menu .drop-down-menu ul li:hover a,
+header.navbar .nav-menu .drop-down-menu ul li:hover .counter {
   color: #0f0f0f;
 }
 header.navbar .nav-menu .drop-down-menu ul li .counter {
-  color: #0f0f0f;
+  color: #5f5f5f;
 }
 header.navbar .nav-menu .drop-down-menu ul li a {
   color: #f2f2f2;
