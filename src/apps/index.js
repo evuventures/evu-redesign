@@ -9,17 +9,16 @@ import {  EffectComposer, EffectPass, RenderPass , ASCIIEffect , ASCIITexture} f
 import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls'
 import { GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader'
 import { DRACOLoader } from 'three/examples/jsm/loaders/DRACOLoader.js';
-import dragon from '../media/models/dragonfly.glb'
 import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls'
 
 import Matrix from '../apps/extra/matrix.js';
+import dragon from '../media/models/dragonfly.glb'
 
-var navIsTrue = undefined
 
 class App{
     constructor(){
 
-        navIsTrue = this.createNav();
+        this.hamburger = [...document.querySelectorAll(".menu-open,.hamburger")]
 
         this.pages = {
             home : new Home(),
@@ -33,6 +32,7 @@ class App{
             height: window.innerHeight
 
         }
+        this.isTrue = this.createNav()
 
         this.createAjaxNavigation()
         this.createReRender()
@@ -191,13 +191,10 @@ class App{
         this.camera.position.z = 1.2;
     }
     onResize() {
-      
-
+    
         this.camera.aspect = this.screen.width / this.screen.height;
         this.camera.updateProjectionMatrix();
-
         this.renderer.setSize(window.innerWidth, window.innerHeight);
-
         this.renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
     }
 
@@ -213,20 +210,20 @@ class App{
         this.controls.update()
         this.pages.effects.matrix.createMatrix()
 
-        requestAnimationFrame(this.update.bind(this))
+        window.requestAnimationFrame(this.update.bind(this))
 
 
     }
 
     addEventListeners(){
-        
-       $(".menu-open, .hamburger").each(function() {
-            $(this).on('click touchstart', function() {
-                navIsTrue.reversed() ? navIsTrue.play() : navIsTrue.reverse();
+        this.hamburger.forEach((element)=>{
+            element.addEventListener('click',()=>{
+                this.isTrue.reversed() ? this.isTrue.play() : this.isTrue.reverse()
+                this.hamburger[0].classList.toggle('open')
 
-                $(".hamburger").toggleClass('open');
-            });
-        });
+            })
+        })
+        
         window.addEventListener('resize',this.onResize.bind(this))
     }
 }
