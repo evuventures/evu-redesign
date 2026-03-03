@@ -1,0 +1,15 @@
+@use "variables" as *;
+@use "mixins" as *;
+//HOME
+
+
+section{
+    @apply p-[1rem];
+    &.home-section-1{
+        .text-xl{
+            z-index: 3;
+            position: relative;
+            color: color($primary-color-1,1.0);  
+        }
+    }
+}

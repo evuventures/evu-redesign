@@ -1,3 +1,25 @@
-header(class="header")
-    
-    
+header(class="header navbar py-6")
+  div(class="nav-menu flex mx-auto justify-between w-4/12")
+    div(class="logo pl-6") Evu
+    div(class="my-auto")
+        div(id="icon3" class="hamburger")
+            span
+            span
+            span
+            span
+            span
+            span
+            span
+            span
+            span
+    span(class="text-highlight menu-open pr-6 my-auto") Menu
+    div(class="drop-down-menu")
+        ul(class="flex flex-col")
+            - var values = ['ventures','investors','events','about','contact']
+            - for(let i=1; i < values.length; i++)
+                li(class="flex")
+                    div(class="flex justify-between w-full px-6")
+                        div(class="counter text-highlight ") #{'0'+i}
+                        a(href="#" class="text-md") #{values[i]} 
+            div 
+                canvas(class='header-canvas')

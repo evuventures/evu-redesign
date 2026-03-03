@@ -1,4 +1,6 @@
 /* FONTS */
+@use "mixins" as *;
+@use "variables" as *;
 
 .text-xxl{
     @apply 
@@ -8,7 +10,9 @@
 }
 
 .text-xl{
-   @apply leading-none; 
+   @apply leading-none uppercase tracking-tighter;
+   font-family: $primary-font-regular;
+   font-weight: 'normal';
 }
 
 .text-lg {
@@ -16,7 +20,8 @@
 }
 
 .text-md{
-    @apply leading-none;  
+   @apply leading-none uppercase; 
+   font-family: $primary-font-thin;
 }
 
 .text-sm {
@@ -31,7 +36,8 @@
 }
 
 .text-highlight {
-   @apply leading-none; 
+   @apply leading-none uppercase; 
+   font-family: $primary-font-thin;
 }
 
 .text-link {

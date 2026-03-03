@@ -1,14 +1,18 @@
-
-
 @use "variables";
 @use "mixins";
 @use "normalize";
 @use "resets";
 @use "fonts";
+@use "fonts-face";
 @use "general";
 @use "blocks/blocks";
+@use "components/components";
+@use "pages/pages";
 
 // Tailwind 
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+
+

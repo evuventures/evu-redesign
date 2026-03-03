@@ -1,0 +1,21 @@
+/* GENERAL */
+@use "mixins" as *;
+@use "variables" as *;
+
+
+
+@include font-face(
+  $primary-font-regular,
+  "../fonts/non-natural-grotesk/non-natural-grotesk-trialversion-regular",
+  400,
+  'normal',
+  otf
+);
+@include font-face(
+  $primary-font-thin,
+  "../fonts/non-natural-grotesk/non-natural-grotesk-trialversion-thin",
+  100,
+  'Thin',
+  otf
+);
+

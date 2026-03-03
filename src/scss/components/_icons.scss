@@ -1,0 +1,71 @@
+@use "variables" as *;
+@use "mixins" as *;
+// ICONS 
+
+.hamburger {
+  width: rem(40);
+  height: rem(40);
+  position: relative;
+  transform: rotate(0deg);
+  transition: .5s ease-in-out;
+  cursor: pointer;
+}
+
+.hamburger span {
+  position: absolute;
+  height: rem(5);
+  width: rem(5);
+  background: color($primary-color-1,1.0);
+  opacity: 1;
+  transform: rotate(0deg);
+  transition: .25s ease-in-out;
+}
+
+/* Left / Right positioning */
+.hamburgerspan:nth-child(odd) {
+  left: 0;
+}
+
+.hamburger span:nth-child(even) {
+  left: 50%;
+}
+
+/* Row positioning */
+.hamburger span:nth-child(1),
+.hamburger span:nth-child(2),
+.hamburger span:nth-child(3) {
+  top: 0;
+}
+
+.hamburger span:nth-child(4),
+.hamburger span:nth-child(5),
+.hamburger span:nth-child(6) {
+  top: 20px;
+}
+
+.hamburger span:nth-child(7),
+.hamburger span:nth-child(8),
+.hamburger span:nth-child(9) {
+  top: 40px;
+}
+
+/* Right edge dots */
+.hamburger span:nth-child(3),
+.hamburger span:nth-child(6),
+.hamburger span:nth-child(9) {
+  left: 100%;
+}
+
+/* OPEN STATE */
+.hamburger.open span:nth-child(2) {
+  top: 20px;
+}
+
+.hamburger.open span:nth-child(5),
+.hamburger.open span:nth-child(6) {
+  left: 50%;
+}
+
+.hamburger.open span:nth-child(8) {
+  top: 20px;
+}

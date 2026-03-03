@@ -18,13 +18,13 @@ module.exports = {
     extend: {
       fontSize: {        
         xxl: [Fluid(4, 200)], 
-        xl: [], 
+        xl: [Fluid(4, 120)], 
         lg: [], 
-        md: [], 
+        md: [[Fluid(1.8, 2)]], 
         sm: [], 
         body: [], 
         input: [], 
-        highlight: [], 
+        highlight: [Fluid(1.2, 1.2)], 
       },      
     },
   },

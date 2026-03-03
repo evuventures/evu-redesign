@@ -64,6 +64,10 @@ module.exports = {
                 use: 'builtin:swc-loader'
             },
             {
+                test: /\.(glsl|vs|fs|vert|frag)$/,
+                type: 'asset/source'
+            },
+            {
                 test: /\.(sa|sc|c)ss$/,
                 use: [
                     rspack.CssExtractRspackPlugin.loader, 

@@ -5,29 +5,41 @@ import GSAP from 'gsap';
 import _ from '../scss/main.scss';
 
 import * as THREE from 'three';
-import {  EffectComposer, EffectPass, RenderPass , ASCIIEffect , ASCIITexture } from "postprocessing";
+import {  EffectComposer, EffectPass, RenderPass , ASCIIEffect , ASCIITexture} from "postprocessing";
 import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls'
 import { GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader'
 import { DRACOLoader } from 'three/examples/jsm/loaders/DRACOLoader.js';
 import dragon from '../media/models/dragonfly.glb'
 import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls'
 
+import Matrix from '../apps/extra/matrix.js';
+
+var navIsTrue = undefined
+
 class App{
     constructor(){
+
+        navIsTrue = this.createNav();
+
         this.pages = {
             home : new Home(),
-            contact : new Contact()
+            contact : new Contact(),
+            effects:{
+                matrix : new Matrix()
+            }
         }
         this.screen ={
             width : window.innerWidth,
             height: window.innerHeight
 
         }
+
         this.createAjaxNavigation()
         this.createReRender()
         this.createScene()
         this.createCamera()
         this.createRenderer()
+        this.createLights()
         this.createAASCIIEffect()
         this.createGeometry()
         this.update()
@@ -73,7 +85,20 @@ class App{
         })
         
     }
+    createNav(){
+        return GSAP.timeline({
+                paused: true,
+                reversed:true
+            })
+            .to('.drop-down-menu ul',
+            {
+                height:'auto',
+                duration:1,
+                ease:'power4.inOut'
+            })
+    }
 
+   
     createReRender(){
         
         barba.hooks.before(() => {
@@ -84,111 +109,109 @@ class App{
         })
     }
     createScene(){
-        this.scene = new THREE.Scene();
+        this.scene = new THREE.Scene()
+        this.scene.background = new THREE.Color(0x171717)
         
     }
     createCamera(){
         this.camera = new THREE.PerspectiveCamera( 70, this.screen.width / this.screen.height, 0.01, 10 );
-        this.camera.position.z = 1;
     }
 
     createRenderer(){
         this.renderer = new THREE.WebGLRenderer({
-            antialias : window.devicePixelRatio < 2
-        });
-        this.renderer.setSize( window.innerWidth, window.innerHeight );
+            canvas:document.querySelector('.main-canvas')
+        })
+        this.renderer.setSize( this.screen.width, this.screen.height )
         document.body.appendChild( this.renderer.domElement );
+    }
+    createLights(){ 
+        const directionalLight = new THREE.DirectionalLight(0xffffff, 1.0);
+        directionalLight.position.set(5, 5, 5); 
+        this.scene.add(directionalLight);
+
+        const ambientLight = new THREE.AmbientLight(0xffffff,0.2);
+        this.scene.add(ambientLight);
     }
     createAASCIIEffect(){
         this.composer = new EffectComposer(this.renderer)
         this.renderPass = new RenderPass(this.scene, this.camera)
         this.composer.addPass(this.renderPass)
-
-   
-
-        // 1. Create the texture with your custom string
         const asciiTexture = new ASCIITexture({
-            cellCount: 6,  
-            fontSize: 16,
-            resolution: 1,             
-        });
-        asciiTexture.needsUpdate = true;
-
-
+            characters: " ''2254547948@",
+            cellCount : 18                         
+        })
+    
         this.aasciiPass = new EffectPass(this.camera , new ASCIIEffect({
-            texture: asciiTexture,
-            cellSize: 5,
+            cellSize:12,
+            invert: true,
+            
         }))
+       
+        this.aasciiPass.effects[0].asciiTexture = asciiTexture;
         this.composer.addPass(this.aasciiPass)
+    
 
 
     }
     createGeometry(){
-        this. geometry = new THREE.TorusGeometry( 6, 3, 60, 30,40);
-        this.material = new THREE.MeshStandardMaterial({ color: 0xffffff });
-        this. cube = new THREE.Mesh(this. geometry, this.material );
-        // this.scene.add( this.cube );
-            this.controls = new OrbitControls(this.camera,this.renderer.domElement)
-            this.controls.enableDamping = true
+        this.material = new THREE.MeshStandardMaterial();
+        this.controls = new OrbitControls(this.camera,this.renderer.domElement)
+        this.controls.enableDamping = true
+
+            
+        this.loader = new GLTFLoader();
+
+        this.dracoLoader = new DRACOLoader();
+        this.dracoLoader.setDecoderPath(window.location.href+'/draco/');
+        this.loader.setDRACOLoader(this.dracoLoader);
+        this.mixer;
+        this.loader.load(dragon, (gltf) =>{
+
+            gltf.scene.traverse((child) => {
+            child.material = this.material
+         
+        })
+            
+            this.scene.add(gltf.scene)
+            this.mixer = new THREE.AnimationMixer(gltf.scene);
+            const action = this.mixer.clipAction(gltf.animations[0])
+            action.play();
+            this.mixer.timeScale = 0.3; 
+            this.timer = new THREE.Timer()
+
+        },
+        (xhr) => {
+            console.log((xhr.loaded / xhr.total) * 100 + '% loaded')
+        },
+        (error) => {
+            console.log(error)
+        }
+        )
+
+        this.camera.position.z = 1.2;
+    }
+    onResize() {
       
-             const directionalLight = new THREE.DirectionalLight(0xffffff, 1);
-                directionalLight.position.set(0, 5, 5); // angled light
-                directionalLight.castShadow = true;
-                this.scene.add(directionalLight);
 
+        this.camera.aspect = this.screen.width / this.screen.height;
+        this.camera.updateProjectionMatrix();
 
-                // Optional: subtle ambient light for fill
-                const ambientLight = new THREE.AmbientLight(0xffffff, 0.2);
-                this.scene.add(ambientLight);
-                
-            const loader = new GLTFLoader();
+        this.renderer.setSize(window.innerWidth, window.innerHeight);
 
-            const dracoLoader = new DRACOLoader();
-            // Set the path to the Draco decoder files
-            dracoLoader.setDecoderPath('/draco/'); // <-- You’ll need these files in your public folder
-            loader.setDRACOLoader(dracoLoader);
-
-            loader.load(
-            dragon, (gltf) =>{
-
-                const model = gltf.scene;
-
-             
-
-                 gltf.scene.traverse((child) => {
-
-                    child.material = this.material;
-
-                    // child.scale.set(0.8, 0.8, 0.8);
-                    child.position.set(0, 0, 0);
-
-                
-    
-                })
-        
-                this.scene.add(model)
-            },
-            (xhr) => {
-                console.log((xhr.loaded / xhr.total) * 100 + '% loaded')
-            },
-            (error) => {
-                console.log(error)
-            }
-            )
-
-
-
-        this.camera.position.z = 3;
+        this.renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
     }
 
-    update( time ) {
-
-        this.cube.rotation.x = time / 2000;
-        this.cube.rotation.y = time / 1000;
-
+    update(time) {
+        if (this.timer) {
+            this.timer.update(time)
+            const delta = this.timer.getDelta(); 
+            this.mixer.update(delta)
+        }
+   
         // this.renderer.render(this.scene, this.camera);
-        this.composer.render();
+        this.composer.render()
         this.controls.update()
+        this.pages.effects.matrix.createMatrix()
 
         requestAnimationFrame(this.update.bind(this))
 
@@ -196,7 +219,15 @@ class App{
     }
 
     addEventListeners(){
-       
+        
+       $(".menu-open, .hamburger").each(function() {
+            $(this).on('click touchstart', function() {
+                navIsTrue.reversed() ? navIsTrue.play() : navIsTrue.reverse();
+
+                $(".hamburger").toggleClass('open');
+            });
+        });
+        window.addEventListener('resize',this.onResize.bind(this))
     }
 }
 
